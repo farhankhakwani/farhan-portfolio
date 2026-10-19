@@ -122,10 +122,10 @@ const Section = ({ id, alt, children }) => (
   </section>
 );
 
-/* ✅ Btn — now full-width on mobile, fits properly */
-const Btn = ({ href, children, ghost, ...p }) => (
+/* ✅ Btn — full-width on mobile, no forced nowrap, accepts className */
+const Btn = ({ href, children, ghost, className = "", ...p }) => (
   <a href={href} {...p}
-    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3 rounded-full text-sm font-semibold transition-transform hover:-translate-y-0.5 whitespace-nowrap"
+    className={`inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-3 rounded-full text-sm font-semibold transition-transform hover:-translate-y-0.5 ${className}`}
     style={ghost
       ? { border: `1px solid ${v("border")}`, color: v("text") }
       : { background: GRAD, color: v("on") }}>
@@ -211,30 +211,34 @@ function Hero() {
   }, [text, del, i]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center px-4 pt-24 pb-16 overflow-hidden" style={{ background: v("bg") }}>
+    <section id="home" className="relative min-h-screen flex items-center px-3 sm:px-4 pt-24 pb-16 overflow-hidden" style={{ background: v("bg") }}>
       <div className="absolute rounded-full pointer-events-none" style={{ top: -120, left: -120, width: 560, height: 560, background: tint("accent", 14), filter: "blur(120px)" }} />
       <div className="absolute inset-0 pointer-events-none"
         style={{ opacity: 0.04, backgroundImage: `linear-gradient(${v("text")} 1px, transparent 1px), linear-gradient(90deg, ${v("text")} 1px, transparent 1px)`, backgroundSize: "60px 60px" }} />
-      <div className="relative max-w-6xl mx-auto w-full grid lg:grid-cols-5 gap-12 items-center">
-        <div className="lg:col-span-3">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm mb-6" style={{ border: `1px solid ${v("border")}`, color: v("second") }}>
+      <div className="relative max-w-6xl mx-auto w-full grid lg:grid-cols-5 gap-10 sm:gap-12 items-center">
+        <div className="lg:col-span-3 min-w-0">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm mb-6" style={{ border: `1px solid ${v("border")}`, color: v("second") }}>
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: v("ok") }} />
               <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: v("ok") }} />
             </span>
             Open to new opportunities
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight" style={{ color: v("text"), lineHeight: 1.05 }}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight break-words" style={{ color: v("text"), lineHeight: 1.05 }}>
             Farhan Arif
           </h1>
-          <div className="min-h-10 mt-4 flex items-center text-lg sm:text-xl md:text-2xl" style={{ color: v("accent") }}>
+          <div className="min-h-10 mt-4 flex items-center text-base sm:text-xl md:text-2xl" style={{ color: v("accent") }}>
             {text}<span className="inline-block w-0.5 h-6 ml-1 animate-pulse" style={{ background: v("accent") }} />
           </div>
-          <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: v("second") }}>{me.summary}</p>
-          {/* ✅ Fixed buttons — w-full on mobile, side-by-side on sm+ */}
+          <p className="mt-6 max-w-xl text-sm sm:text-lg leading-relaxed" style={{ color: v("second") }}>{me.summary}</p>
+          {/* ✅ Hero buttons — full width stacked on mobile, side-by-side on sm+ */}
           <div className="mt-8 flex flex-col sm:flex-row gap-3 w-full">
-            <Btn href="#work">View my work <ArrowRight size={16} /></Btn>
-            <Btn href="#contact" ghost><Mail size={16} /> Get in touch</Btn>
+            <Btn href="#work">
+              View my work <ArrowRight size={16} className="shrink-0" />
+            </Btn>
+            <Btn href="#contact" ghost>
+              <Mail size={16} className="shrink-0" /> Get in touch
+            </Btn>
           </div>
           <div className="mt-10 flex items-center gap-3">
             {[[Github, me.github, "GitHub"], [Linkedin, me.linkedin, "LinkedIn"], [Mail, `mailto:${me.email}`, "Email"]].map(([Icon, href, label]) => (
@@ -244,14 +248,15 @@ function Hero() {
           </div>
         </div>
 
-        {/* Live stack card — shows real work instead of a decorative orb */}
-        <div className="lg:col-span-2">
-          <Card className="p-5 shadow-xl">
+        {/* Live stack card — code block now scrolls horizontally on mobile */}
+        <div className="lg:col-span-2 min-w-0">
+          <Card className="p-4 sm:p-5 shadow-xl">
             <div className="flex items-center gap-1.5 mb-4">
-              {["#F87171", "#FBBF24", "#34D399"].map((c) => <span key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />)}
-              <span className="ml-2 text-xs font-mono" style={{ color: v("muted") }}>InventoryController.php</span>
+              {["#F87171", "#FBBF24", "#34D399"].map((c) => <span key={c} className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: c }} />)}
+              <span className="ml-2 text-[10px] sm:text-xs font-mono truncate" style={{ color: v("muted") }}>InventoryController.php</span>
             </div>
-            <pre className="text-xs leading-relaxed overflow-x-auto font-mono" style={{ color: v("second"), margin: 0 }}>
+            <div className="rounded-xl overflow-x-auto" style={{ background: tint("text", 4) }}>
+              <pre className="text-[10px] sm:text-xs leading-relaxed font-mono p-3 min-w-max" style={{ color: v("second"), margin: 0 }}>
 {`public function estimate(Project $project)
 {
     $items = $project->bimModel
@@ -263,7 +268,8 @@ function Hero() {
         'audit' => $this->log($project),
     ]);
 }`}
-            </pre>
+              </pre>
+            </div>
             <div className="mt-4 flex flex-wrap gap-1.5">
               {["Laravel", "PostgreSQL", "REST API", "OpenAI"].map((t) => <Chip key={t} accent>{t}</Chip>)}
             </div>
@@ -461,13 +467,13 @@ function Contact() {
             return (
               <W key={it.label} href={it.href} target={it.ext ? "_blank" : undefined} rel={it.ext ? "noopener noreferrer" : undefined}
                 className="flex items-center gap-4 p-4 rounded-2xl" style={{ background: v("card"), border: `1px solid ${v("border")}` }}>
-                <span className="p-2.5 rounded-xl" style={{ background: tint("accent", 14), color: v("accent") }}><Icon size={18} /></span>
+                <span className="p-2.5 rounded-xl shrink-0" style={{ background: tint("accent", 14), color: v("accent") }}><Icon size={18} /></span>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs" style={{ color: v("muted") }}>{it.label}</p>
                   <p className="text-sm font-medium truncate" style={{ color: v("text") }}>{it.value}</p>
                 </div>
                 {it.copy && (
-                  <button onClick={(e) => { e.preventDefault(); copy(); }} aria-label="Copy email" className="p-2 rounded-lg" style={{ background: tint("text", 6), color: v("second") }}>
+                  <button onClick={(e) => { e.preventDefault(); copy(); }} aria-label="Copy email" className="p-2 rounded-lg shrink-0" style={{ background: tint("text", 6), color: v("second") }}>
                     {copied ? <Check size={14} style={{ color: v("ok") }} /> : <Copy size={14} />}
                   </button>
                 )}
@@ -511,7 +517,7 @@ export default function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         html { scroll-behavior: smooth; }
-        body { overflow-x: hidden; }
+        html, body { overflow-x: hidden; max-width: 100%; }
         a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         input:focus, textarea:focus { border-color: var(--accent) !important; }
         ::selection { background: color-mix(in srgb, var(--accent) 35%, transparent); }
