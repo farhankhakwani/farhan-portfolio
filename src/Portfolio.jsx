@@ -122,9 +122,10 @@ const Section = ({ id, alt, children }) => (
   </section>
 );
 
+/* ✅ Btn — now full-width on mobile, fits properly */
 const Btn = ({ href, children, ghost, ...p }) => (
   <a href={href} {...p}
-    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-transform hover:-translate-y-0.5"
+    className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3 rounded-full text-sm font-semibold transition-transform hover:-translate-y-0.5 whitespace-nowrap"
     style={ghost
       ? { border: `1px solid ${v("border")}`, color: v("text") }
       : { background: GRAD, color: v("on") }}>
@@ -223,14 +224,15 @@ function Hero() {
             </span>
             Open to new opportunities
           </div>
-          <h1 className="text-5xl sm:text-7xl font-bold tracking-tight" style={{ color: v("text"), lineHeight: 1.05 }}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight" style={{ color: v("text"), lineHeight: 1.05 }}>
             Farhan Arif
           </h1>
-          <div className="h-10 mt-4 flex items-center text-xl sm:text-2xl" style={{ color: v("accent") }}>
+          <div className="min-h-10 mt-4 flex items-center text-lg sm:text-xl md:text-2xl" style={{ color: v("accent") }}>
             {text}<span className="inline-block w-0.5 h-6 ml-1 animate-pulse" style={{ background: v("accent") }} />
           </div>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed" style={{ color: v("second") }}>{me.summary}</p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <p className="mt-6 max-w-xl text-base sm:text-lg leading-relaxed" style={{ color: v("second") }}>{me.summary}</p>
+          {/* ✅ Fixed buttons — w-full on mobile, side-by-side on sm+ */}
+          <div className="mt-8 flex flex-col sm:flex-row gap-3 w-full">
             <Btn href="#work">View my work <ArrowRight size={16} /></Btn>
             <Btn href="#contact" ghost><Mail size={16} /> Get in touch</Btn>
           </div>
@@ -299,7 +301,7 @@ function About() {
           </Card>
         </Reveal>
         <div className="lg:col-span-7 space-y-6">
-          <Reveal><p className="text-lg leading-relaxed" style={{ color: v("text"), maxWidth: 640 }}>{me.about}</p></Reveal>
+          <Reveal><p className="text-base sm:text-lg leading-relaxed" style={{ color: v("text"), maxWidth: 640 }}>{me.about}</p></Reveal>
           <Reveal delay={100}>
             <div className="grid sm:grid-cols-3 gap-3">
               {[["1+ year", "Production experience"], ["5", "Projects delivered"], ["3", "Enterprise-style systems"]].map(([a, b]) => (
@@ -509,6 +511,7 @@ export default function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
         a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         input:focus, textarea:focus { border-color: var(--accent) !important; }
         ::selection { background: color-mix(in srgb, var(--accent) 35%, transparent); }
